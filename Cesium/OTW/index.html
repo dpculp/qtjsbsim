@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<!--
+
+This HTML file is compatible with CesiumJS version 1.44, but may still
+work with older or newer versions.
+
+-->
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <title>OTW-Viewer</title>
+    <!-- edit this src to match your CesiumJS installation -->
+    <script src="../../Cesium.js"></script>
+    <style>
+        @import url(../../Widgets/widgets.css);
+        html, body, #cesiumContainer {
+            width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+  <div id="cesiumContainer" class="fullWindow"></div>
+  <div id="loadingOverlay"><h1>Loading...</h1></div>
+  <script src="viewer.js"></script>
+</body>
+</html>

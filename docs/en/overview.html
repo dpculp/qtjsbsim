@@ -1,0 +1,69 @@
+<HTML>
+
+<HEAD>
+<TITLE>overview</TITLE>
+</HEAD>
+
+<BODY>
+<IMG src="../images/QtJSBSim-help-header.jpg"><br><hr>
+<basefont face="arial" size="2">
+<a href="home.html">&lt Home</a>
+<hr><br>
+
+<font size="5"><i>Overview</i></font><br><br>
+
+<IMG src="../images/interface.jpg"><br>
+
+<a name="PFD"></a>
+<br><br><font size="4">1.</font>&nbsp&nbsp
+This is the PFD (Primary Flight Display).  It is designed to represent a typical modern PFD.  On the left is the speed tape, which displays the airspeed in knots.  Just below the speed tape is the Mach number display. In the center is the AI (Attitude Indicator). The flight director bars are not yet supported in QtJSBSim. To the right of the AI is the altitude tape, which displays altitude in feet.  At far right is the vertical speed indicator, which displays vertical speed in 1000's of feet per minute.  Below the altitude tape is the altimeter barometric pressure setting.  This is not yet supported in QtJSBSim and always displays standard pressure.  At the bottom of the PFD is a compass display which displays magnetic heading.  At bottom-left is a display of ILS identifier and distance (DME).
+
+<a name="controls"></a>
+<br><br><br><font size="4">2.</font>&nbsp&nbsp
+These are the controls for JSBSim and QtJSBSim.
+<ul>
+  <li><b>JSBSim</b></li>
+  <li>The Start button launches JSBSim as a separate process.</li>
+  <li>The Pause/Resume button pauses and unpauses JSBSim.</li>
+  <li>The Stop button sends a "terminate" signal to the JSBSim process via a UDP socket.</li>
+  <br>
+  <li><b>QtJSBSim</b></li>
+  <li>The Connect button opens/closes socket connections between JSBSim and QtJSBSim.</li>
+  <li>The Viewer button opens the Cesium viewer.</li>
+  <li>The FG button opens/closes an outbound socket connection to FlightGear.</li>
+  <li>The Help button opens this help dialog.</li>
+  <li>The Quit button closes QtJSBSim.</li>
+</ul>
+
+<a name="output"></a>
+<br><br><font size="4">3.</font>&nbsp&nbsp
+This is the JSBSim output section.  It displays data which has been sent from JSBSim via a UDP socket.  The output is grouped on several tabs. Note : the "UI frame rate" comes from QtJSBSim, not JSBSim.
+
+<a name="ac-controls"></a>
+<br><br><br><font size="4">4.</font>&nbsp&nbsp
+This is the aircraft controls section.  There are five tabs:
+<br>
+<ul>
+  <li><b>joystick</b>&nbsp-&nbsp Shows the joystick name string and the control inputs.</li>
+  <li><b>aircraft</b>&nbsp-&nbsp Provides means to control aircraft configuration.</li>
+  <li><b>sim</b>&nbsp-&nbsp Provides means to control the simulation environment.</li>
+  <li><b>nav</b>&nbsp-&nbsp Provides some PFD  and navigation controls.</li>
+  <li><b>autopilot</b>&nbsp-&nbsp is not yet implemented.</li>
+</ul>
+
+<a name="console"></a>
+<br><br><font size="4">5.</font>&nbsp&nbsp
+This is the console/files section.  It displays information on five tabs:
+<br>
+<ul>
+  <li><b>QtJSBSim</b>&nbsp-&nbsp Displays useful information from QtJSBSim on its initialization and on the progress of the simulation session.</li>
+  <li><b>JSBSim</b>&nbsp-&nbsp JSBSim's console output is echoed here.</li>
+  <li><b>Aircraft</b>&nbsp-&nbsp The aircraft XML configuration file used by JSBSim.</li>
+  <li><b>Init</b>&nbsp-&nbsp The initialization XML file used by JSBSim.</li>
+  <li><b>debug</b>&nbsp-&nbsp A place to display debugging information.</li>
+</ul>
+
+
+<br><br><hr><br>
+</BODY>
+<HTML>

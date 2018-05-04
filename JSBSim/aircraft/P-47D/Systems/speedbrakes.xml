@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+
+<system name="speedbrakes">
+
+  <channel name="Speedbrake">
+
+   <kinematic name="Speedbrake Control">
+     <input>fcs/speedbrake-cmd-norm</input>
+     <traverse>
+       <setting>
+          <position> 0 </position>
+          <time>     0 </time>
+       </setting>
+       <setting>
+          <position> 1 </position>
+          <time>     1 </time>
+       </setting>
+     </traverse>
+     <output>fcs/speedbrake-pos-norm</output>
+   </kinematic>
+
+   <switch name="Ventral Speedbrake Logic">
+          <default value="fcs/speedbrake-cmd-norm"/>
+          <test value="0">
+                gear/gear-cmd-norm gt 0
+          </test>
+          <output>systems/speedbrakes/ventral-cmd</output>
+   </switch>
+
+   <kinematic name="Ventral Speedbrake Control">
+     <input>systems/speedbrakes/ventral-cmd</input>
+     <traverse>
+       <setting>
+          <position> 0 </position>
+          <time>     0 </time>
+       </setting>
+       <setting>
+          <position> 1 </position>
+          <time>     1 </time>
+       </setting>
+     </traverse>
+     <output>systems/speedbrakes/ventral-pos-norm</output>
+   </kinematic>
+
+  </channel>
+
+</system>

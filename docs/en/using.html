@@ -1,0 +1,55 @@
+<HTML>
+
+<HEAD>
+<TITLE>using</TITLE>
+</HEAD>
+
+<BODY>
+<IMG src="../images/QtJSBSim-help-header.jpg"><br><hr>
+<basefont face="arial" size="2">
+<a href="home.html">&lt Home</a>
+<hr><br>
+
+<font size="5"><i>Using QtJSBSim</i></font><br><br>
+
+<a name="workflow"></a>
+<br><br><br><font size="4"><u>Workflow</u></font><br>
+<p style="margin-left: 40px">
+The first task is to launch JSBSim by clicking the "Start" button.  The only way you know that JSBSim has started is to check the "JSBSim" console output.  This output will show several pages of initialization output.  By default JSBSim is started in a paused state.  JSBSim has now started and is waiting for socket connections to be completed.  Now you click the "Connect" button, which opens communications and unpauses JSBSim.  You will see several things now.  The PFD will come alive with data, the JSBSim output display will fill with data, the QtJSBSim console will show that UDP sockets are established, and the JSBSim console output will now show elapsed time since it started.  You can now open the Cesium viewer with the "Viewer" button.  The viewer will open and data from the terrain servers will fill the viewer (this may take some time depending on the speed of your internet connection).  You can also click the FG button to send data to a running instance of FlightGear.
+<br><br>
+When you are finished and ready to close the simulator it is important to shut down JSBSim **BEFORE** you close the socket connections.  Remember that your control over the JSBSim process is only via the socket connection.
+</p>
+
+
+<a name="initialization"></a>
+<br><br><br><font size="4"><u>Initialization</u></font><br>
+<p style="margin-left: 40px">
+When QtJSBSim is started it will search for its initialization file which is located at /src/qtjsbsim.ini.  If this file cannot be found QtJSBSim will still start, however you will see in the console output the message that the ini file could not be found.  In this case you will not be able to start JSBSim because the JSBSim command line is specified in the ini file.
+<br><br>
+The ini file contains the following sections:
+<ul>
+  <li>The <b>[cmdline]</b> section contains the strings that will be combined to build the JSBSim command line.  More command line switches can be found listed in the JSBSim documentation.
+  <br><br><li>The <b>[ports]</b> section is where the port addresses for QtJSBSim are defined.  The addresses that JSBSim uses are defined in the aircraft configuration file.  Remember that the input port in QtJSBSim will be called an output port in JSBSim, and vice-versa.  The output port to FlightGear is defined here also.
+  <br><br><li>The <b>[rates]</b> section is where we select the UI rate, which is the rate at which the QtJSBSim main loop will try to run.  The actual rate may be slower depending on your hardware.  The rate at which the QtJSBSim output socket sends control data to JSBSim is selected here.  The rate at which data is sent to FlightGear is also specified here.
+  <br><br><li>The <b>[aircraft]</b> section sets the starting pitch trim, and it also sets the rate at which the joystick trim switch (sometimes called a "hat" switch) will adjust.
+  <br><br><li>The <b>[joystick]</b> section is for setting the joystick dead bands.
+  <br><br><li>The <b>[viewer]</b> section is where the Cesium viewer will get the HTML and JavaScript documents it needs to begin running.  By default the viewer will get these documents from my server hosted at GoDaddy.com (daveshangar.org).  If you would like to program your own Cesium code, then you'll need to install a webserver on your computer (like nodejs, for example), then set "use-local" to true.  The viewer will now get the files from the local location you define in "localURL".
+  <br><br><li>The <b>[airport]</b> section is where local navigational information is set.  Presently the data is for Los Angeles International Airport (KLAX).  The ILS information is for runway 25L.
+</ul>
+</p>
+
+
+<a name="trouble"></a>
+<br><br><br><font size="4"><u>Troubleshooting</u></font><br>
+<p style="margin-left: 40px">
+<ul>
+  <li><b>JSBSim will not start -</b>&nbsp;&nbsp;First check that the ini file has the correct path to the JSBSim executable.  If it is OK, then the problem is probably in the aircraft configuration file or init file used by JSBSim.  You may have to run JSBSim from a separate console window to debug your configuration files.
+  <br><br><li><b>Joystick axes/buttons wrong -</b>&nbsp;&nbsp;Joystick axes and button numbering vary between operating systems.  The default numbering works in linux, but may not work in your OS.  Assignment of axis numbers has recently been added to the ini file (24 Mar 2018), however it may take more than just renumbering to get the axes to work right.  For instance your joystick axis may be reversed, or may have a different range.  In this case the only solution is to edit the get_joystick_inputs function in MainWindow.cpp.  The default joystick handling works for the Logitech Extreme 3D Pro installed on a linux OS.
+  <br><br><li><b>Nothing appears in Viewer -</b>&nbsp;&nbsp;You need an internet connection with enough bandwidth to load the terrain mesh and photo overlays in a reasonable amount of time.  Servers may be down.  Local internet security apps may interfere.  You may need to use more recent QtJSBSim since the viewer code changed (12 Apr 2018) to support CesiumJS version 1.44.
+</ul> 
+</p>
+
+
+<br><br><hr><br>
+</BODY>
+<HTML>

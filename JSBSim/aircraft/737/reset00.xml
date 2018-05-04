@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<initialize name="reset00">
+  <!--
+    This file sets up the aircraft to start off
+    from the runway in preparation for takeoff.
+    Runway 25R at KLAX.
+  -->
+  <ubody unit="FT/SEC">    0.0  </ubody>
+  <vbody unit="FT/SEC">    0.0  </vbody>
+  <wbody unit="FT/SEC">    0.0  </wbody>
+  <latitude unit="DEG">   33.93955183 </latitude>
+  <longitude unit="DEG">-118.3832183  </longitude>
+  <phi unit="DEG">         0.0  </phi>
+  <theta unit="DEG">       0.0  </theta>
+  <psi unit="DEG">       263.0  </psi>
+  <elevation unit="FT">   95.248 </elevation>  
+  <trim>                   1    </trim>
+
+</initialize>

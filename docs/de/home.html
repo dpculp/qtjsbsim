@@ -1,0 +1,43 @@
+<HTML>
+
+<HEAD>
+<TITLE>home</TITLE>
+</HEAD>
+
+<BODY>
+<IMG src="../images/QtJSBSim-help-header.jpg"><br><hr>
+<basefont face="arial" size="2">
+
+<script language="JavaScript">
+
+window.language="en";
+function setLanguage(LanguageChoice) {
+   if (LanguageChoice.value=="English") {
+     window.language="en";
+   } else if (LanguageChoice.value=="Deutch") {
+     window.language="de";
+   }
+   window.location="../" + window.language + "/home.html";
+}
+
+</script>
+Language: 
+     <input type="button" value="English" onclick="setLanguage(this)">
+     <input type="button" value="Deutch"  onclick="setLanguage(this)">
+    
+
+<hr>
+<font size="5"><i>Die Schnittstelle</i></font><br>
+<ul>
+  <li> <a href="overview.html">&Uuml;berblick</a> </li>
+  <li> <a href="pfd.html">PFD</a> </li>
+  <li> <a href="sim-controls.html">Sim Controls</a> </li>
+  <li> <a href="jsbsim-output.html">JSBSim Output</a> </li>
+  <li> <a href="aircraft-controls.html">Flugsteuerungen</a> </li>
+  <li> <a href="console-files.html">Console and Files</a> </li>
+</ul>
+
+
+<br><br><hr><br>
+</BODY>
+<HTML>

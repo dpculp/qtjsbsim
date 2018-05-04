@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/hud/hud_base.png</file>
+        <file>images/hud/horizon.png</file>
+    </qresource>
+</RCC>

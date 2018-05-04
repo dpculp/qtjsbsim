@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<system name="engine-sound">
+
+  <channel name="channel">
+
+   <fcs_function name="systems/engine-sound/pitch">
+     <function>
+         <quotient>
+           <property>/engines/engine[0]/rpm</property>
+           <value>1600.0</value>
+         </quotient>
+     </function>
+   </fcs_function>
+ 
+  </channel>
+
+</system>

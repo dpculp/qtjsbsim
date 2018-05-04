@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<system name="TWS">
+
+  <property value="0">systems/TWS/engaged</property>
+
+  <channel name="Tail Wheel Steering">
+
+     <scheduled_gain name="systems/TWS/steer-cmd">
+      <input>fcs/rudder-cmd-norm</input>
+      <table>
+        <independentVar lookup="row">systems/TWS/engaged</independentVar>
+         <tableData>
+            0    3
+            1    50
+         </tableData>
+      </table>
+      <output>fcs/steer-pos-deg[2]</output>
+      <output>/sim/multiplay/generic/float[2]</output>
+     </scheduled_gain>
+ 
+  </channel>
+
+</system>

@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!--
+  File:     R-2800-73.xml
+  Author:   Aero-Matic v 0.81
+
+  Inputs:
+    name:           R-2800-73
+    type:           piston
+    power:          2800.0 hp
+    augmented?      no
+    injected?       no
+-->
+
+<piston_engine name="R-2800-73">
+  <displacement unit="IN3"> 2804.5 </displacement>
+  <maxmp unit="INHG">    56.0   </maxmp>	
+  <maxhp>              2100     </maxhp>
+  <cycles>                4     </cycles>
+  <bore unit="IN">        5.75  </bore>
+  <stroke unit="IN">      6.00  </stroke>
+  <cylinders>            18     </cylinders>
+  <compression-ratio>     6.85  </compression-ratio>  
+  <bsfc>                  0.4   </bsfc>
+  <volumetric-efficiency> 0.775 </volumetric-efficiency>  
+  <idlerpm>             550 </idlerpm>
+  <maxrpm>             2800 </maxrpm>
+  <maxthrottle>           1.0 </maxthrottle>
+  <minthrottle>           0.1 </minthrottle>
+  <sparkfaildrop>         0.2 </sparkfaildrop>
+  <numboostspeeds>        2   </numboostspeeds>
+  <boostoverride>         0   </boostoverride>
+
+  <ratedboost1>       8.15 </ratedboost1> <!-- 46.5 inHg -->
+  <ratedpower1>    1900    </ratedpower1>
+  <ratedrpm1>      2600    </ratedrpm1>
+  <ratedaltitude1> 4900    </ratedaltitude1>
+
+  <ratedboost2>        7.41 </ratedboost2> <!-- 45 inHg -->
+  <ratedpower2>     1600    </ratedpower2>
+  <ratedrpm2>       2600    </ratedrpm2>
+  <ratedaltitude2> 16200    </ratedaltitude2>
+
+  <takeoffboost>  10.85   </takeoffboost>   <!-- 52.0 inHg -->
+</piston_engine>

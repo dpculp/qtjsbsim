@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<system name="automixture">
+
+  <channel name="R3350">
+
+   <pure_gain>
+     <input>atmosphere/delta</input>
+     <gain>1.0</gain>
+     <output>/controls/engines/engine[0]/mixture</output>
+   </pure_gain>
+
+  </channel>
+
+
+</system>
