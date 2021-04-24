@@ -164,6 +164,9 @@ MainWindow::MainWindow( QWidget * parent ) :
     connect(m_ui->StartJSBSimButton, SIGNAL(clicked()), this,
                      SLOT(StartJSBSim()));
 
+    // Create TCP Socket for sending commands to JSBSim (not used yet)
+    jsbsimTCPSocket = new QTcpSocket(this);
+
     // Set up timer for the UI main simulation loop (default = 100 hz).
     iterating = false;
     timer = new QTimer(this);
@@ -203,6 +206,7 @@ MainWindow::~MainWindow()
     delete nav;
     delete ap;
     delete FGSocket;
+    delete jsbsimTCPSocket;
     if ( m_ui ) { delete m_ui; m_ui = 0; }
 }
 
@@ -226,6 +230,9 @@ void MainWindow::MainLoop()
     UpdateNavigation();
     UpdateAutopilot();
     UpdateDisplays();
+    if (JSBSim->state() == QProcess::Running) {
+        m_ui->StartJSBSimButtonLight->setEnabled(true);
+    } else m_ui->StartJSBSimButtonLight->setEnabled(false);
     doDebugCalculations();
     debug->update();
     viewer->updateData(latitude, longitude, altitude, pitch, roll, yaw);
@@ -263,19 +270,18 @@ void MainWindow::get_joystick_inputs(void)
     m_ui->throttleSlider->setValue(throttle*100);
     m_ui->throttleLabel->setText(QString::number(throttle, 'f', 3));
 
-    m_ui->jsButton_0->setChecked(joystick->getButtonState(0));
-    m_ui->jsButton_1->setChecked(joystick->getButtonState(1));
-    m_ui->jsButton_2->setChecked(joystick->getButtonState(2));
-    m_ui->jsButton_3->setChecked(joystick->getButtonState(3));
-    m_ui->jsButton_4->setChecked(joystick->getButtonState(4));
-    m_ui->jsButton_5->setChecked(joystick->getButtonState(5));
-    m_ui->jsButton_6->setChecked(joystick->getButtonState(6));
-    m_ui->jsButton_7->setChecked(joystick->getButtonState(7));
-    m_ui->jsButton_8->setChecked(joystick->getButtonState(8));
-    m_ui->jsButton_9->setChecked(joystick->getButtonState(9));
-    m_ui->jsButton_10->setChecked(joystick->getButtonState(10));
-    m_ui->jsButton_11->setChecked(joystick->getButtonState(11));
-    m_ui->jsButton_12->setChecked(joystick->getButtonState(12));
+    m_ui->Button_0_on->setEnabled(joystick->getButtonState(0));
+    m_ui->Button_1_on->setEnabled(joystick->getButtonState(1));
+    m_ui->Button_2_on->setEnabled(joystick->getButtonState(2));
+    m_ui->Button_3_on->setEnabled(joystick->getButtonState(3));
+    m_ui->Button_4_on->setEnabled(joystick->getButtonState(4));
+    m_ui->Button_5_on->setEnabled(joystick->getButtonState(5));
+    m_ui->Button_6_on->setEnabled(joystick->getButtonState(6));
+    m_ui->Button_7_on->setEnabled(joystick->getButtonState(7));
+    m_ui->Button_8_on->setEnabled(joystick->getButtonState(8));
+    m_ui->Button_9_on->setEnabled(joystick->getButtonState(9));
+    m_ui->Button_10_on->setEnabled(joystick->getButtonState(10));
+    m_ui->Button_11_on->setEnabled(joystick->getButtonState(11));
 
 }
 
@@ -433,10 +439,19 @@ void MainWindow::getJSBSimData(void)
     GeoAlt = data.at(51);
     ECRadius = data.at(52);
 
-    // now that we have our first data from JSBSim
+    // Now that we have our first data from JSBSim, we populate the
+    // local variables so that our initial conditions match.
     if( firstTime ) {
-        setDebugWatch();
         firstTime = false;
+        setDebugWatch();
+
+        // initialize values to these widgets. NOTE: "payload" is actually
+        // the weight of pointmass[0]
+        m_ui->payloadWeightEdit->setText(QString::number(payload, 'f', 2));
+        payload_cmd = payload;
+        m_ui->temperatureEdit->setText(QString::number(OAT, 'f', 2));
+        m_ui->windDirEdit->setText(QString::number(wind_dir, 'f', 2));
+        m_ui->windSpeedEdit->setText(QString::number(wind_speed, 'f', 2));
     }
 
 }
@@ -485,16 +500,6 @@ void MainWindow::setJSBSimControls(void)
    datagram.append(QString::number(gear_cmd, 'f', 5));
    datagram.append(',');
    datagram.append(QString::number(speedbrakes_cmd, 'f', 5));
-   datagram.append(',');
-   datagram.append(QString::number(wind_dir*0.017453293, 'f', 5));   // degrees to radians
-   datagram.append(',');
-   datagram.append(QString::number(wind_speed*1.687809857, 'f', 5));   // knots to fps
-   datagram.append(',');
-   datagram.append(QString::number(deltaT*1.8, 'f', 5));    // Celsius to Rankine
-   datagram.append(',');
-   datagram.append(QString::number(payload_cmd, 'f', 5));
-   datagram.append(',');
-   datagram.append(QString::number(altTerrain, 'f', 5));
    datagram.append(',');
    datagram.append(QString::number(jsbsimTerminate, 'f', 0));
    datagram.append(',');
@@ -600,7 +605,7 @@ void MainWindow::UpdateDisplays()
                // 65-84
 
   // Send data to tab 5 (Sim)
-  m_ui->dataLabel_85->setText("737");
+  m_ui->dataLabel_85->setText(aircraft_name);
   m_ui->dataLabel_86->setText(QString::number(simtime, 'f', 2));
   m_ui->dataLabel_87->setText(QString::number(jsbsim_dt, 'f', 6));
   //m_ui->dataLabel_88->setText(QString::number(_simtime, 'f', 2));
@@ -746,7 +751,10 @@ void MainWindow::processError(QProcess::ProcessError err) {
 
 
 ////////////////////////////////////////////////////////////////////////////////
-// Starts JSBSim standalone as a separate process.
+// Starts JSBSim standalone as a separate process.  It also fills the widgets
+// AircraftEditor and InitFileEditor with text from their associated files.  We
+// assume here that the config filename is the same as the aircraft directory
+// name + ".xml".
 //
 void MainWindow::StartJSBSim(void) {
 
@@ -757,17 +765,18 @@ void MainWindow::StartJSBSim(void) {
           JSBSim->start(JSBSimExecutable, JSBSimArgs);
 
           m_ui->console->appendPlainText("Starting " + JSBSimExecutable);
-          m_ui->StopJSBSimButton->setChecked(false);
 
           QString AircraftDir = installPath + "/JSBSim/aircraft/";
 
-          AircraftConfig = new QFile(AircraftDir + "737/737.xml");
+          QString path = AircraftDir + aircraft_name + "/" + aircraft_name + ".xml";
+          AircraftConfig = new QFile(path);
           if(AircraftConfig->open(QIODevice::ReadWrite | QIODevice::Text)){
               m_ui->AircraftEditor->setPlainText(AircraftConfig->readAll());
               AircraftConfig->close();
           }
 
-          InitFile = new QFile(AircraftDir + "737/reset00.xml");
+          path = AircraftDir + aircraft_name + "/" + reset_name + ".xml";
+          InitFile = new QFile(path);
           if(InitFile->open(QIODevice::ReadWrite | QIODevice::Text)){
               m_ui->InitFileEditor->setPlainText(InitFile->readAll());
               InitFile->close();
@@ -776,8 +785,12 @@ void MainWindow::StartJSBSim(void) {
           delete AircraftConfig;
           delete InitFile;
           m_ui->ConnectButton->setEnabled(true);
-          m_ui->PauseJSBSimButton->setEnabled(true);
-          m_ui->StopJSBSimButton->setEnabled(true);
+          if (m_ui->ConnectButtonLight->isEnabled()){
+              m_ui->PauseJSBSimButton->setEnabled(true);
+              m_ui->PauseJSBSimButton->setChecked(false);
+              m_ui->StopJSBSimButton->setEnabled(true);
+              m_ui->StopJSBSimButton->setChecked(false);
+          }
 
     }
 }
@@ -802,6 +815,9 @@ void MainWindow::readSettings(void) {
     QString arg4 = settings->value("cmdline/arg4").toString();
     QString arg5 = settings->value("cmdline/arg5").toString();
     QString arg6 = settings->value("cmdline/arg6").toString();
+
+    aircraft_name = settings->value("cmdline/aircraft").toString().remove(0,11);
+    reset_name = settings->value("cmdline/initfile").toString().remove(0,11);
 
     if (arg1.length() > 0) JSBSimArgs << arg1;
     if (arg2.length() > 0) JSBSimArgs << arg2;
@@ -882,6 +898,13 @@ void MainWindow::on_ConnectButton_clicked()
       if (jsbsimDataSocket) {
           m_ui->console->appendPlainText("Established JSBSim input socket at port " +
                                          QString::number(inputPort));
+          m_ui->PauseJSBSimButton->setEnabled(true);
+          m_ui->PauseJSBSimButton->setChecked(false);
+          m_ui->StopJSBSimButton->setEnabled(true);
+          m_ui->StopJSBSimButton->setChecked(false);
+          m_ui->ConnectButtonLight->setEnabled(true);
+          m_ui->ViewerButton->setEnabled(true);
+          m_ui->FGButton->setEnabled(true);
       }
 
       // Set up UDP data output to JSBSim
@@ -898,6 +921,8 @@ void MainWindow::on_ConnectButton_clicked()
 
     } else {
 
+        // Disconnecting communications with JSBSim
+        jsbsimControlsSocket->flush();
         delete jsbsimDataSocket;
         delete jsbsimControlsSocket;
         jsbsimDataSocket = NULL;
@@ -906,6 +931,9 @@ void MainWindow::on_ConnectButton_clicked()
         m_ui->console->appendPlainText("Closed JSBSim input socket.");
         m_ui->console->appendPlainText("Closed JSBSim output socket.");
         m_ui->ConnectButton->setChecked(false);
+        m_ui->PauseJSBSimButton->setEnabled(false);
+        m_ui->StopJSBSimButton->setEnabled(false);
+        m_ui->ConnectButtonLight->setEnabled(false);
     }
 }
 
@@ -981,7 +1009,9 @@ void MainWindow::on_StopJSBSimButton_clicked()
 {
     toggle( &jsbsimTerminate );              // terminate JSBSim
     m_ui->StartJSBSimButton->setChecked(false);
+    m_ui->PauseJSBSimButton->setEnabled(false);
     m_ui->ConnectButton->setEnabled(true);
+    m_ui->ConnectButton->setChecked(false);
     m_ui->console->appendPlainText("Stop signal sent to JSBSim");
 }
 
@@ -998,7 +1028,7 @@ void MainWindow::on_QuitButton_clicked()
 
 
 // Launch the default browser and show home help file
-void MainWindow::on_helpButton_clicked()
+void MainWindow::on_HelpButton_clicked()
 {
     QDesktopServices::openUrl(QUrl("file:///" + installPath + "/docs/en/home.html"));
 }
@@ -1104,8 +1134,10 @@ void MainWindow::on_FGButton_clicked(bool checked)
     ConnectToFG = checked;
     if (checked) {
         m_ui->console->appendPlainText("Sending data to FlightGear.");
+        m_ui->FGButtonLight->setEnabled(true);
     }  else {
         m_ui->console->appendPlainText("Stopped sending data to FlightGear.");
+        m_ui->FGButtonLight->setEnabled(false);
     }
 }
 
@@ -1114,7 +1146,9 @@ void MainWindow::on_FGButton_clicked(bool checked)
 //
 void MainWindow::on_ViewerButton_clicked()
 {
-    viewer->setWindowTitle("CesiumJS Viewer");
+    if (viewer->isVisible()) return;
+
+    viewer->setWindowTitle("Cesium Ion Viewer");
     if (useLocal) {
          viewer->load(localURL);
     } else {

@@ -2,8 +2,6 @@
     <qresource prefix="/">
         <file>images/dkgreen.png</file>
         <file>images/green.png</file>
-        <file>images/help.png</file>
-        <file>images/pause.png</file>
-        <file>images/stop.png</file>
+        <file>images/browser.png</file>
     </qresource>
 </RCC>

@@ -17,6 +17,7 @@
 #include <QProcess>
 #include <QMessageBox>
 #include <QUdpSocket>
+#include <QTcpSocket>
 #include <QTextStream>
 #include <QVector>
 #include <QtNetwork>
@@ -68,6 +69,7 @@ public:
     QString JSBSimWorkingDir;
     QUdpSocket* jsbsimDataSocket;
     QUdpSocket* jsbsimControlsSocket;
+    QTcpSocket* jsbsimTCPSocket;
     QFile* AircraftConfig;
     QFile* InitFile;
 
@@ -165,7 +167,7 @@ private slots:
     void on_StopJSBSimButton_clicked();
     void on_QuitButton_clicked();
     void on_ViewerButton_clicked();
-    void on_helpButton_clicked();
+    void on_HelpButton_clicked();
     void on_PauseJSBSimButton_clicked();
     void on_ILSButton_clicked();
     void on_spinBox_2_valueChanged(int arg1);
@@ -188,6 +190,8 @@ private:
     bool connected;
 
     QString line;
+    QString aircraft_name;
+    QString reset_name;
     QTime*  UItimer;
     QTime*  timeStamp;
     double framerate;
