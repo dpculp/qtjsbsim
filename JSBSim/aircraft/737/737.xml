@@ -66,9 +66,9 @@
             <y>   0 </y>
             <z> -30 </z>
         </location>
-        <pointmass name="payload">
-            <weight unit="LBS"> 10000 </weight>
-            <location>
+        <pointmass name="payload1">
+            <weight unit="LBS"> 20000 </weight>
+            <location name="POINTMASS" unit="IN">
                 <x> 639 </x>
                 <y>   0 </y>
                 <z> -40 </z>
@@ -180,7 +180,7 @@
             </location>
             <type>JET-A</type>
             <capacity unit="LBS"> 10200 </capacity>
-            <contents unit="LBS"> 10000 </contents>
+            <contents unit="LBS">  4000 </contents>
         </tank>
         <tank type="FUEL"><!-- Right wing tank -->
             <location unit="IN">
@@ -190,7 +190,7 @@
             </location>
             <type>JET-A</type>
             <capacity unit="LBS"> 10200 </capacity>
-            <contents unit="LBS"> 10000 </contents>
+            <contents unit="LBS">  4000 </contents>
         </tank>
         <tank type="FUEL"><!-- Center tank -->
             <location unit="IN">
@@ -200,7 +200,7 @@
             </location>
             <type>JET-A</type>
             <capacity unit="LBS"> 15000 </capacity>
-            <contents unit="LBS">  4000 </contents>
+            <contents unit="LBS">     0 </contents>
         </tank>
     </propulsion>
 
@@ -474,7 +474,7 @@
                   <table>
                       <independentVar>aero/h_b-mac-ft</independentVar>
                       <tableData>
-                          0.0000	0.0480
+                          0.0000	0.4800
                           0.1000	0.5150
                           0.1500	0.6290
                           0.2000	0.7090
@@ -603,7 +603,7 @@
                     <property>aero/qbar-psf</property>
                     <property>metrics/Sw-sqft</property>
                     <property>gear/gear-pos-norm</property>
-                    <value>0.015</value>
+                    <value>0.023</value>
                 </product>
             </function>
 
@@ -934,7 +934,7 @@
  <!-- this is the telnet interface -->
  <!-- <input port="5137" /> -->
  
- <!-- 18 properties input, + 1 for the time stamp -->
+ <!-- 13 properties input, + 1 for the time stamp -->
  <input port="5139" type="QTJSBSIM" rate="20">
    
   <property> fcs/aileron-cmd-norm </property> 
@@ -949,11 +949,6 @@
   <property> gear/gear-cmd-norm </property>
   
   <property> fcs/speedbrake-cmd-norm </property>
-  <property> atmosphere/psiw-rad </property>
-  <property> atmosphere/wind-mag-fps </property>
-  <property> atmosphere/delta-T </property>
-  <property> inertia/pointmass-weight-lbs[0] </property>
-  <property> position/terrain-elevation-asl-ft </property>
   <property> simulation/terminate </property>
   <property> simulation/pause </property>
 
