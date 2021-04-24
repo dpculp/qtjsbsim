@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -13,7 +11,7 @@
    height="30"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="1.0.2 (394de47547, 2021-03-26)"
    sodipodi:docname="pfd_alt_frame.svg">
   <defs
      id="defs4" />
@@ -24,16 +22,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.9999999"
-     inkscape:cx="206.47307"
-     inkscape:cy="166.9"
+     inkscape:zoom="5.656854"
+     inkscape:cx="73.315655"
+     inkscape:cy="52.643109"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1920"
-     inkscape:window-height="1005"
-     inkscape:window-x="-9"
-     inkscape:window-y="-9"
+     inkscape:window-height="1015"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:snap-object-midpoints="false"
      inkscape:snap-smooth-nodes="false"
@@ -44,7 +42,8 @@
      inkscape:snap-center="false"
      inkscape:snap-nodes="true"
      showguides="true"
-     inkscape:guide-bbox="true" />
+     inkscape:guide-bbox="true"
+     inkscape:document-rotation="0" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -64,8 +63,8 @@
      transform="translate(0,-1022.3622)">
     <path
        inkscape:connector-curvature="0"
-       style="fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-opacity:1"
-       d="m 11,1027.3622 0,5 -5,5 5,5 0,5 35,0 0,-20 -35,0 z"
+       style="fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:1.04539;stroke-opacity:1"
+       d="m 11.464252,1027.3622 v 5 l -5.464252,5 5.464252,5 v 5 h 38.24976 v -20 z"
        id="rect4728-8" />
   </g>
 </svg>
